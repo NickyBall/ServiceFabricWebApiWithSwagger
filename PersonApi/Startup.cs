@@ -35,6 +35,18 @@ namespace PersonApi
                 var xmlPath = Path.Combine(basePath, "PersonApi.xml");
                 c.IncludeXmlComments(xmlPath);
             });
+            services.AddIdentityServer()
+                .AddDeveloperSigningCredential()
+                .AddInMemoryApiResources(Config.GetApiResources())
+                .AddInMemoryClients(Config.GetClients());
+
+            services.AddAuthentication("Bearer")
+                .AddIdentityServerAuthentication(options =>
+                {
+                    options.Authority = "http://localhost:8994";
+                    options.RequireHttpsMetadata = false;
+                    options.ApiName = "api1";
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -50,6 +62,7 @@ namespace PersonApi
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
+            app.UseIdentityServer();
             app.UseMvc();
         }
     }
