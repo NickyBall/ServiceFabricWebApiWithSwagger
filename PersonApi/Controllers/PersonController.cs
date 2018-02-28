@@ -14,9 +14,30 @@ namespace PersonApi.Controllers
     public class PersonController : Controller
     {
         [HttpGet]
-        public IActionResult GetIdentities()
+        public List<Person> GetPersons()
         {
-            return new JsonResult(from c in User.Claims select new { c.Type, c.Value });
+            return new List<Person>()
+            {
+                new Person()
+                {
+                    Firstname = "Jakkrit",
+                    Lastname = "Junrat",
+                    Age = 27
+                },
+                new Person()
+                {
+                    Firstname = "Apinya",
+                    Lastname = "Pimpisan",
+                    Age = 27
+                }
+            };
         }
+    }
+
+    public class Person
+    {
+        public string Firstname { get; set; }
+        public string Lastname { get; set; }
+        public int Age { get; set; }
     }
 }

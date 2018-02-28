@@ -22,7 +22,7 @@ namespace Client
             }
 
             // request token
-            var tokenClient = new TokenClient(disco.TokenEndpoint, "client", "secret");
+            var tokenClient = new TokenClient(disco.TokenEndpoint, "ClientId", "ClientSecret");
             var tokenResponse = tokenClient.RequestClientCredentialsAsync("api1").GetAwaiter().GetResult();
 
             if (tokenResponse.IsError)

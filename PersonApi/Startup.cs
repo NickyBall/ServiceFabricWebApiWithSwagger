@@ -38,7 +38,7 @@ namespace PersonApi
             services.AddIdentityServer()
                 .AddDeveloperSigningCredential()
                 .AddInMemoryApiResources(Config.GetApiResources())
-                .AddInMemoryClients(Config.GetClients());
+                .AddClientStore<ClientStore>();
 
             services.AddAuthentication("Bearer")
                 .AddIdentityServerAuthentication(options =>
