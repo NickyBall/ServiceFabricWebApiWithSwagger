@@ -16,16 +16,19 @@ namespace PersonApi
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, StorageClient Storage, string Url)
         {
             Configuration = configuration;
+            this.Url = Url;
         }
 
         public IConfiguration Configuration { get; }
+        private string Url { get; set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            
             services.AddMvc();
             services.AddSwaggerGen(c =>
             {
@@ -35,6 +38,7 @@ namespace PersonApi
                 var xmlPath = Path.Combine(basePath, "PersonApi.xml");
                 c.IncludeXmlComments(xmlPath);
             });
+
             services.AddIdentityServer()
                 .AddDeveloperSigningCredential()
                 .AddInMemoryApiResources(Config.GetApiResources())
@@ -43,20 +47,20 @@ namespace PersonApi
             services.AddAuthentication("Bearer")
                 .AddIdentityServerAuthentication(options =>
                 {
-                    options.Authority = "http://localhost:8994";
+                    options.Authority = $"{Url}/auth/";
                     options.RequireHttpsMetadata = false;
                     options.ApiName = "api1";
                 });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, StorageClient Storage, string Url)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
-            
+            app.UsePathBase("/xxx");
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {

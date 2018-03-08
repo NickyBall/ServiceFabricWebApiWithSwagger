@@ -10,10 +10,10 @@ namespace PersonApi
 {
     public class ClientStore : IClientStore
     {
-        public StorageClient Db { get; set; }
-        public ClientStore()
+        private StorageClient Db { get; set; }
+        public ClientStore(StorageClient Storage)
         {
-            Db = new StorageClient();
+            Db = Storage;
         }
         public async Task<Client> FindClientByIdAsync(string clientId)
         {

@@ -11,8 +11,8 @@ namespace PersonApi
     {
         #region Properties
 
-        private string ConnectionString => "UseDevelopmentStorage=true";
-        private string PrefixTable => "IDx";
+        public string ConnectionString => "UseDevelopmentStorage=true";
+        public string PrefixTable => "IDx";
 
         public CloudTable ClientStore { get { ThrowIfDisposed(); return _ClientStore; } set { _ClientStore = value; } }
         private CloudTable _ClientStore;
