@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Fabric;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -32,7 +33,7 @@ namespace PersonApi
             return new ServiceInstanceListener[]
             {
                 new ServiceInstanceListener(serviceContext =>
-                    new KestrelCommunicationListener(serviceContext, "ServiceEndpoint", (url, listener) =>
+                    new HttpSysCommunicationListener(serviceContext, "ServiceEndpoint", (url, listener) =>
                     {
                         string host = serviceContext.NodeContext.IPAddressOrFQDN;
                         var endpointconfig = serviceContext.CodePackageActivationContext.GetEndpoint("ServiceEndpoint");
@@ -42,7 +43,12 @@ namespace PersonApi
                         ServiceEventSource.Current.ServiceMessage(serviceContext, $"Starting Kestrel on {url}");
                         StorageClient Storage = new StorageClient();
                         return new WebHostBuilder()
-                                    .UseKestrel()
+                                    //.UseKestrel()
+                                    .UseHttpSys(options =>
+                                    {
+                                        //options.Authentication.Schemes = Microsoft.AspNetCore.Server.HttpSys.AuthenticationSchemes.Negotiate | Microsoft.AspNetCore.Server.HttpSys.AuthenticationSchemes.NTLM;
+                                        //options.Authentication.AllowAnonymous = true;
+                                    })
                                     .ConfigureServices(
                                         services => services
                                             .AddSingleton<StatelessServiceContext>(serviceContext)
@@ -52,7 +58,8 @@ namespace PersonApi
                                     .UseContentRoot(Directory.GetCurrentDirectory())
                                     .UseStartup<Startup>()
                                     .UseServiceFabricIntegration(listener, ServiceFabricIntegrationOptions.None)
-                                    .UseUrls(UrlEndpoint)
+                                    .UseUrls(url + "/xxx")
+                                    //.Start(url + "/xxx");
                                     .Build();
                     }))
             };

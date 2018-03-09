@@ -47,9 +47,10 @@ namespace PersonApi
             services.AddAuthentication("Bearer")
                 .AddIdentityServerAuthentication(options =>
                 {
-                    options.Authority = $"{Url}/auth/";
+                    options.Authority = $"{Url}/";
                     options.RequireHttpsMetadata = false;
                     options.ApiName = "api1";
+                    
                 });
         }
 
@@ -60,7 +61,8 @@ namespace PersonApi
             {
                 app.UseDeveloperExceptionPage();
             }
-            app.UsePathBase("/xxx");
+            //app.UsePathBase("/{test}");
+            
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
