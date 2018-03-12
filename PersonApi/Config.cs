@@ -22,7 +22,7 @@ namespace PersonApi
             {
                 new Client
                 {
-                    ClientId = "client",
+                    ClientId = "ClientId",
 
                     // no interactive user, use the clientid/secret for authentication
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
@@ -30,7 +30,7 @@ namespace PersonApi
                     // secret for authentication
                     ClientSecrets =
                     {
-                        new Secret("secret".Sha256())
+                        new Secret("ClientSecret".Sha256())
                     },
 
                     // scopes that client has access to

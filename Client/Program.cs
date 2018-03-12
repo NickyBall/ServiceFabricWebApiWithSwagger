@@ -14,7 +14,7 @@ namespace Client
         static void Main(string[] args)
         {
             // discover endpoints from metadata
-            var disco = DiscoveryClient.GetAsync("http://localhost:8994/xxx").GetAwaiter().GetResult();
+            var disco = DiscoveryClient.GetAsync("http://localhost:8994/xxx/").GetAwaiter().GetResult();
             if (disco.IsError)
             {
                 Console.WriteLine(disco.Error);
@@ -37,7 +37,7 @@ namespace Client
             var client = new HttpClient();
             client.SetBearerToken(tokenResponse.AccessToken);
 
-            var response = client.GetAsync("http://localhost:8994/api/Person/").GetAwaiter().GetResult();
+            var response = client.GetAsync("http://localhost:8994/xxx/api/Person/").GetAwaiter().GetResult();
             if (!response.IsSuccessStatusCode)
             {
                 Console.WriteLine(response.StatusCode);

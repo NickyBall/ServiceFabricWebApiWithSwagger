@@ -17,6 +17,12 @@ namespace PersonApi
         public CloudTable ClientStore { get { ThrowIfDisposed(); return _ClientStore; } set { _ClientStore = value; } }
         private CloudTable _ClientStore;
 
+        public CloudTable ApiResourceTable { get { ThrowIfDisposed(); return _ApiResourceTable; } set { _ApiResourceTable = value; } }
+        private CloudTable _ApiResourceTable;
+
+        public CloudTable IdentityTable { get { ThrowIfDisposed(); return _IdentityTable; } set { _IdentityTable = value; } }
+        private CloudTable _IdentityTable;
+
         private CloudTableClient CloudStorageClient = null;
         //private CloudQueueClient QueueClient = null;
         #endregion
@@ -32,9 +38,13 @@ namespace PersonApi
             #region Table
             //Insert Table This!!!
             _ClientStore = CloudStorageClient.GetTableReference(PrefixTable + "ClientStore");
+            _ApiResourceTable = CloudStorageClient.GetTableReference(PrefixTable + "ApiResource");
+            _IdentityTable = CloudStorageClient.GetTableReference(PrefixTable + "Identity");
 
             //Create If Not Exist
             _ClientStore.CreateIfNotExistsAsync();
+            _ApiResourceTable.CreateIfNotExistsAsync();
+            _IdentityTable.CreateIfNotExistsAsync();
             #endregion
             #region Queue
             //Insert Queue
@@ -70,6 +80,8 @@ namespace PersonApi
                 //QueueClient = null;
                 //Insert Remove on this!!!!!
                 _ClientStore = null;
+                _ApiResourceTable = null;
+                _IdentityTable = null;
                 //Queue
 
                 _disposed = true;

@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using IdentityServer4.Stores;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -23,7 +24,7 @@ namespace PersonApi
         }
 
         public IConfiguration Configuration { get; }
-        private string Url { get; set; }
+        public string Url { get; set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -39,15 +40,22 @@ namespace PersonApi
                 c.IncludeXmlComments(xmlPath);
             });
 
+
+
             services.AddIdentityServer()
                 .AddDeveloperSigningCredential()
-                .AddInMemoryApiResources(Config.GetApiResources())
+                //.AddInMemoryApiResources(Config.GetApiResources())
+                //.AddInMemoryClients(Config.GetClients());
+                .AddResourceStore<ResourceStore>()
                 .AddClientStore<ClientStore>();
+
+            //services.AddTransient<IResourceStore, ResourceStore>();
+            //services.AddTransient<IClientStore, ClientStore>();
 
             services.AddAuthentication("Bearer")
                 .AddIdentityServerAuthentication(options =>
                 {
-                    options.Authority = $"{Url}/";
+                    options.Authority = Url;
                     options.RequireHttpsMetadata = false;
                     options.ApiName = "api1";
                     
