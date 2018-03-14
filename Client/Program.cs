@@ -18,7 +18,7 @@ namespace Client
             if (disco.IsError)
             {
                 Console.WriteLine(disco.Error);
-                return;
+                Console.ReadLine();
             }
 
             // request token
@@ -28,7 +28,7 @@ namespace Client
             if (tokenResponse.IsError)
             {
                 Console.WriteLine(tokenResponse.Error);
-                return;
+                Console.ReadLine();
             }
 
             Console.WriteLine(tokenResponse.Json);
@@ -47,6 +47,7 @@ namespace Client
                 var content = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
                 Console.WriteLine(JArray.Parse(content));
             }
+            Console.ReadLine();
         }
     }
 }

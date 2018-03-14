@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using IdentityServer4.Stores;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -43,21 +44,21 @@ namespace PersonApi
 
 
             services.AddIdentityServer()
-                .AddDeveloperSigningCredential()
+                //.AddDeveloperSigningCredential()
                 //.AddInMemoryApiResources(Config.GetApiResources())
                 //.AddInMemoryClients(Config.GetClients());
                 .AddResourceStore<ResourceStore>()
                 .AddClientStore<ClientStore>();
 
-            //services.AddTransient<IResourceStore, ResourceStore>();
-            //services.AddTransient<IClientStore, ClientStore>();
+            services.AddTransient<IResourceStore, ResourceStore>();
+            services.AddTransient<IClientStore, ClientStore>();
 
             services.AddAuthentication("Bearer")
                 .AddIdentityServerAuthentication(options =>
                 {
                     options.Authority = Url;
-                    options.RequireHttpsMetadata = false;
-                    options.ApiName = "api1";
+                    options.RequireHttpsMetadata = true;
+                    options.ApiName = "api2";
                     
                 });
         }
@@ -76,6 +77,18 @@ namespace PersonApi
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
+            //var forwardOptions = new ForwardedHeadersOptions
+            //{
+            //    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto,
+            //    RequireHeaderSymmetry = false
+            //};
+
+            //forwardOptions.KnownNetworks.Clear();
+            //forwardOptions.KnownProxies.Clear();
+
+            //// ref: https://github.com/aspnet/Docs/issues/2384
+            //app.UseForwardedHeaders(forwardOptions);
+
             app.UseIdentityServer();
             app.UseMvc();
         }

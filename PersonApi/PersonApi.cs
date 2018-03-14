@@ -33,10 +33,10 @@ namespace PersonApi
             return new ServiceInstanceListener[]
             {
                 new ServiceInstanceListener(serviceContext =>
-                    new HttpSysCommunicationListener(serviceContext, "ServiceEndpoint", (url, listener) =>
+                    new HttpSysCommunicationListener(serviceContext, "ServiceEndpointHttps", (url, listener) =>
                     {
                         string host = serviceContext.NodeContext.IPAddressOrFQDN;
-                        var endpointconfig = serviceContext.CodePackageActivationContext.GetEndpoint("ServiceEndpoint");
+                        var endpointconfig = serviceContext.CodePackageActivationContext.GetEndpoint("ServiceEndpointHttps");
                         int port = endpointconfig.Port;
                         var scheme = endpointconfig.Protocol.ToString();
                         string UrlEndpoint = $"{scheme}://{host}:{port}/xxx/";
